@@ -24,11 +24,26 @@ module "aks_naming" {
 }
 
 # ============================================================================
+# Tags
+# ============================================================================
+
+locals {
+  default_tags = {
+    Environment = var.environment
+    Workload    = var.workload
+    ManagedBy   = "Terraform"
+    Location    = var.location
+  }
+
+  tags = merge(local.default_tags, var.common_tags)
+}
+
+# ============================================================================
 # AKS Cluster
 # ============================================================================
 
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = module.aks_naming.name
+  name                = module.aks_naming.kubernetes_cluster
   location            = var.location
   resource_group_name = var.resource_group_name
   dns_prefix          = "${var.workload}-${var.environment}"
@@ -36,7 +51,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   sku_tier            = var.sku_tier
 
   private_cluster_enabled             = var.private_cluster_enabled
-  automatic_channel_upgrade           = var.automatic_channel_upgrade
+  automatic_upgrade_channel           = var.automatic_channel_upgrade
   role_based_access_control_enabled   = var.role_based_access_control_enabled
 
   # Default/System Node Pool
@@ -101,20 +116,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   # HTTP Application Routing
-  dynamic "http_application_routing_enabled" {
-    for_each = var.enable_http_application_routing ? [1] : []
-    content {
-      enabled = true
-    }
-  }
+  http_application_routing_enabled = var.enable_http_application_routing
 
   # Azure Policy
-  dynamic "azure_policy_enabled" {
-    for_each = var.enable_azure_policy ? [1] : []
-    content {
-      enabled = true
-    }
-  }
+  azure_policy_enabled = var.enable_azure_policy
 
   # Maintenance Window
   dynamic "maintenance_window" {

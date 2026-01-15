@@ -1,5 +1,11 @@
 # AKS Module
 
+## Purpose
+
+This Terraform module is designed to provision and manage Azure Kubernetes Service (AKS) clusters in the East US region using Infrastructure as Code principles. It automates the deployment of production-ready Kubernetes clusters with enterprise-grade configuration, eliminating manual setup and ensuring consistent, repeatable deployments.
+
+## Overview
+
 This module creates an Azure Kubernetes Service (AKS) cluster with enterprise-grade configuration for East US region.
 
 ## Features

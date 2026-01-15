@@ -146,7 +146,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
-  tags = module.aks_naming.tags
+  tags = local.tags
 
   lifecycle {
     ignore_changes = [
@@ -184,7 +184,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
     max_surge = "10%"
   }
 
-  tags = module.aks_naming.tags
+  tags = local.tags
 
   lifecycle {
     ignore_changes = [

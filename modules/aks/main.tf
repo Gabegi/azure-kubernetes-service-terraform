@@ -17,12 +17,10 @@ terraform {
 module "aks_naming" {
   source = "../naming"
 
-  resource_type = var.resource_type
-  workload      = var.workload
-  environment   = var.environment
-  location      = var.location
-  instance      = var.instance
-  common_tags   = var.common_tags
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+  instance    = var.instance
 }
 
 # ============================================================================

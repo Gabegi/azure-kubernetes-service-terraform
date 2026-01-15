@@ -100,7 +100,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     for_each = length(var.admin_group_object_ids) > 0 ? [1] : []
 
     content {
-      managed                = true
       azure_rbac_enabled     = var.azure_rbac_enabled
       admin_group_object_ids = var.admin_group_object_ids
     }
@@ -200,7 +199,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 resource "azurerm_monitor_diagnostic_setting" "aks" {
   count = var.enable_monitoring && var.log_analytics_workspace_id != null ? 1 : 0
 
-  name                       = "${module.aks_naming.name}-diag"
+  name                       = "${module.aks_naming.kubernetes_cluster}-diag"
   target_resource_id         = azurerm_kubernetes_cluster.aks.id
   log_analytics_workspace_id = var.log_analytics_workspace_id
 

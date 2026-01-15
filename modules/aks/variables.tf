@@ -4,12 +4,6 @@
 # Naming Variables (for internal naming module)
 # ============================================================================
 
-variable "resource_type" {
-  type        = string
-  description = "Azure resource type abbreviation"
-  default     = "aks"
-}
-
 variable "workload" {
   type        = string
   description = "Workload or application name"

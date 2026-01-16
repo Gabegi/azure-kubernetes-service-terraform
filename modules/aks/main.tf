@@ -59,7 +59,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     name                = var.system_node_pool_name       # Pool name (max 12 chars)
     vm_size             = var.system_node_pool_vm_size    # VM size (e.g., Standard_D4s_v3)
     node_count          = var.system_node_pool_node_count # Initial node count
-    enable_auto_scaling = true                            # Enable cluster autoscaler
+    auto_scaling_enabled = true                            # Enable cluster autoscaler
     min_count           = var.system_node_pool_min_count  # Minimum nodes when scaling down
     max_count           = var.system_node_pool_max_count  # Maximum nodes when scaling up
     max_pods            = var.system_node_pool_max_pods   # Max pods per node (Azure CNI limit)
@@ -188,7 +188,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
   vm_size               = each.value.vm_size               # VM size for this pool
   node_count            = each.value.node_count            # Initial node count
-  enable_auto_scaling   = true                             # Enable autoscaler
+  auto_scaling_enabled  = true                             # Enable autoscaler
   min_count             = each.value.min_count             # Min nodes
   max_count             = each.value.max_count             # Max nodes
   max_pods              = each.value.max_pods              # Max pods per node
@@ -256,9 +256,4 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
     category = "cluster-autoscaler"
   }
 
-  # Collect all metrics for dashboards and alerts
-  metric {
-    category = "AllMetrics"
-    enabled  = true
-  }
 }

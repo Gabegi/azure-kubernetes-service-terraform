@@ -2,15 +2,6 @@
 # Azure Kubernetes Service (AKS) module for East US region
 # Provisions a production-ready managed Kubernetes cluster
 
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
-    }
-  }
-}
-
 # ============================================================================
 # Internal Naming Module
 # Generates consistent resource names following Azure naming conventions

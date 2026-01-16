@@ -8,12 +8,25 @@
 module "rg_naming" {
   source = "../naming"
 
-  resource_type = var.resource_type
-  workload      = var.workload
-  environment   = var.environment
-  location      = var.location
-  instance      = var.instance
-  common_tags   = var.common_tags
+  workload    = var.workload
+  environment = var.environment
+  location    = var.location
+  instance    = var.instance
+}
+
+# ============================================================================
+# Tags
+# ============================================================================
+
+locals {
+  default_tags = {
+    Environment = var.environment
+    Workload    = var.workload
+    ManagedBy   = "Terraform"
+    Location    = var.location
+  }
+
+  tags = merge(local.default_tags, var.common_tags)
 }
 
 # ============================================================================
@@ -21,9 +34,9 @@ module "rg_naming" {
 # ============================================================================
 
 resource "azurerm_resource_group" "rg" {
-  name     = module.rg_naming.name
+  name     = module.rg_naming.resource_group
   location = var.location
-  tags     = module.rg_naming.tags
+  tags     = local.tags
 
   # Prevent accidental deletion in production
   lifecycle {
@@ -36,7 +49,7 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_management_lock" "rg_lock" {
   count = var.enable_resource_lock ? 1 : 0
 
-  name       = "${module.rg_naming.name}-lock"
+  name       = "${module.rg_naming.resource_group}-lock"
   scope      = azurerm_resource_group.rg.id
   lock_level = var.lock_level # CanNotDelete or ReadOnly
   notes      = var.lock_notes

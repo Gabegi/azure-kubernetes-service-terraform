@@ -4,12 +4,6 @@
 # Naming Variables (for internal naming module)
 # ============================================================================
 
-variable "resource_type" {
-  type        = string
-  description = "Azure resource type abbreviation (e.g., 'rg' for Resource Group)"
-  default     = "rg"
-}
-
 variable "workload" {
   type        = string
   description = "Workload or application name"

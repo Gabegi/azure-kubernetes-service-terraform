@@ -43,7 +43,7 @@ module "networking" {
   environment         = local.environment
   location            = local.location
   instance            = local.instance
-  resource_group_name = module.resource_group.name
+  resource_group_name = module.resource_group.rg_name
   common_tags         = local.common_tags
 
   vnet_address_space = ["10.0.0.0/16"]
@@ -62,7 +62,7 @@ module "networking" {
 resource "azurerm_log_analytics_workspace" "aks" {
   name                = "log-${local.workload}-${local.environment}-eus-${local.instance}"
   location            = local.location
-  resource_group_name = module.resource_group.name
+  resource_group_name = module.resource_group.rg_name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 
@@ -80,7 +80,7 @@ module "aks" {
   environment         = local.environment
   location            = local.location
   instance            = local.instance
-  resource_group_name = module.resource_group.name
+  resource_group_name = module.resource_group.rg_name
   common_tags         = local.common_tags
 
   # Cluster config
@@ -116,7 +116,7 @@ module "aks" {
 
 output "resource_group_name" {
   description = "Name of the resource group"
-  value       = module.resource_group.name
+  value       = module.resource_group.rg_name
 }
 
 output "aks_cluster_name" {
@@ -131,5 +131,5 @@ output "aks_cluster_fqdn" {
 
 output "kube_config_command" {
   description = "Command to get kubeconfig"
-  value       = "az aks get-credentials --resource-group ${module.resource_group.name} --name ${module.aks.name}"
+  value       = "az aks get-credentials --resource-group ${module.resource_group.rg_name} --name ${module.aks.name}"
 }

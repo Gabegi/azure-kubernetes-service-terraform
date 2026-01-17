@@ -66,3 +66,4 @@ terraform.rc
 # Windows
 Thumbs.db
 Desktop.ini
+.terraform.lock.hcl

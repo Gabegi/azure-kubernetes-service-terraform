@@ -84,8 +84,8 @@ module "aks" {
   common_tags         = local.common_tags
 
   # Cluster config
-  kubernetes_version = "1.28"
-  sku_tier           = "Free"  # Use "Standard" for production
+  # kubernetes_version not set - Azure will use default supported version
+  sku_tier = "Free" # Use "Standard" for production
 
   # System node pool
   system_node_pool_name       = "system"
@@ -93,6 +93,7 @@ module "aks" {
   system_node_pool_node_count = 3
   system_node_pool_min_count  = 3
   system_node_pool_max_count  = 5
+  system_node_pool_zones      = ["1"]
 
   # Networking
   vnet_subnet_id = module.networking.subnet_ids["aks"]

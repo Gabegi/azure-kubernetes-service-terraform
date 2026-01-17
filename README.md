@@ -23,24 +23,24 @@ Add your Azure subscription ID to the appropriate tfvars file:
 
 ```bash
 terraform init
-terraform plan -var-file=vars/dev.tfvars
-terraform apply -var-file=vars/dev.tfvars
+terraform plan -var-file="vars/dev.tfvars"
+terraform apply -var-file="vars/dev.tfvars" -auto-approve
 ```
 
 ### Production
 
 ```bash
 terraform init
-terraform plan -var-file=vars/prd.tfvars
-terraform apply -var-file=vars/prd.tfvars
+terraform plan -var-file="vars/prd.tfvars"
+terraform apply -var-file="vars/prd.tfvars" -auto-approve
 ```
 
 ### Destroy
 
 ```bash
 # Development
-terraform destroy -var-file=vars/dev.tfvars
+terraform destroy -var-file="vars/dev.tfvars"
 
 # Production
-terraform destroy -var-file=vars/prd.tfvars
+terraform destroy -var-file="vars/prd.tfvars"
 ```

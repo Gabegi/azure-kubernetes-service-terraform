@@ -47,8 +47,8 @@ variable "resource_group_name" {
 
 variable "kubernetes_version" {
   type        = string
-  description = "Kubernetes version for the cluster"
-  default     = "1.28"
+  description = "Kubernetes version for the cluster (null = Azure default)"
+  default     = null
 }
 
 variable "sku_tier" {

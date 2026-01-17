@@ -129,7 +129,3 @@ output "aks_cluster_fqdn" {
   value       = module.aks.fqdn
 }
 
-output "kube_config_command" {
-  description = "Command to get kubeconfig"
-  value       = "az aks get-credentials --resource-group ${module.resource_group.rg_name} --name ${module.aks.name}"
-}

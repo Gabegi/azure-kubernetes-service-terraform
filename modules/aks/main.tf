@@ -47,7 +47,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
 
   # Security & Access Settings
   private_cluster_enabled           = var.private_cluster_enabled           # If true, API server is private only
-  automatic_upgrade_channel         = var.automatic_channel_upgrade         # Auto-upgrade: patch, stable, rapid, node-image
   role_based_access_control_enabled = var.role_based_access_control_enabled # Enable Kubernetes RBAC
 
   # ---------------------------------------------------------------------------

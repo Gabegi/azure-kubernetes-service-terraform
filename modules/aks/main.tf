@@ -58,7 +58,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     name                = var.system_node_pool_name       # Pool name (max 12 chars)
     vm_size             = var.system_node_pool_vm_size    # VM size (e.g., Standard_D4s_v3)
     node_count          = var.system_node_pool_node_count # Initial node count
-    auto_scaling_enabled = true                            # Enable cluster autoscaler
+    enable_auto_scaling = true                             # Enable cluster autoscaler
     min_count           = var.system_node_pool_min_count  # Minimum nodes when scaling down
     max_count           = var.system_node_pool_max_count  # Maximum nodes when scaling up
     max_pods            = var.system_node_pool_max_pods   # Max pods per node (Azure CNI limit)
@@ -187,7 +187,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
   kubernetes_cluster_id = azurerm_kubernetes_cluster.aks.id
   vm_size               = each.value.vm_size               # VM size for this pool
   node_count            = each.value.node_count            # Initial node count
-  auto_scaling_enabled  = true                             # Enable autoscaler
+  enable_auto_scaling   = true                             # Enable autoscaler
   min_count             = each.value.min_count             # Min nodes
   max_count             = each.value.max_count             # Max nodes
   max_pods              = each.value.max_pods              # Max pods per node
@@ -224,7 +224,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "user" {
 # ============================================================================
 
 resource "azurerm_monitor_diagnostic_setting" "aks" {
-  count = var.enable_monitoring && var.log_analytics_workspace_id != null ? 1 : 0
+  count = var.enable_monitoring ? 1 : 0
 
   name                       = "${module.aks_naming.kubernetes_cluster}-diag"
   target_resource_id         = azurerm_kubernetes_cluster.aks.id

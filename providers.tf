@@ -1,4 +1,4 @@
-# versions.tf
+# providers.tf
 # Terraform and provider version constraints
 
 terraform {
@@ -12,6 +12,12 @@ terraform {
   }
 }
 
+variable "subscription_id" {
+  type        = string
+  description = "Azure subscription ID"
+}
+
 provider "azurerm" {
   features {}
+  subscription_id = var.subscription_id
 }

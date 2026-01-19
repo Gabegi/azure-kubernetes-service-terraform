@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "gvy73QfJj6M=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\lelyg\\Desktop\\code\\azure-kubernetes-service-terraform\\src\\weather-api\\WeatherApi\\WeatherApi.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\lelyg\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.10\\microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
+    "C:\\Users\\lelyg\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

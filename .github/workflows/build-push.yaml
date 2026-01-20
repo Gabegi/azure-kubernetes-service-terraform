@@ -1,7 +1,7 @@
 name: Build and Push to ACR
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Manual trigger only
 
 env:
   ACR_NAME: ${{ vars.ACR_NAME }}

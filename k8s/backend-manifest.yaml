@@ -1,18 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: weather-api
-  labels:
-    app: weather-api
+  name: weather-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: weather-api
+      app: weather-backend
   template:
     metadata:
       labels:
-        app: weather-api
+        app: weather-backend
     spec:
       containers:
         - name: weather-api
@@ -25,14 +23,14 @@ spec:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
             - name: Cors__AllowedOrigins__0
-              value: "http://weather-frontend-service:8080"
+              value: "http://weather-frontend-service"
           resources:
             requests:
               memory: "128Mi"
               cpu: "100m"
             limits:
               memory: "256Mi"
-              cpu: "500m"
+              cpu: "200m"
           readinessProbe:
             httpGet:
               path: /api/health
@@ -49,11 +47,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: weather-api-service
+  name: weather-backend-service
 spec:
+  type: ClusterIP # Internal only
   selector:
-    app: weather-api
+    app: weather-backend
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080
-  type: ClusterIP

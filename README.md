@@ -15,8 +15,21 @@ terraform apply -var-file="vars/dev.tfvars" -auto-approve
 ```
 
 ### 2. Set Up GitHub Secrets
-- Add secret `AZURE_CREDENTIALS` - Service principal JSON
-- Add variable `ACR_NAME` - Your ACR name
+
+Create a service principal:
+```bash
+az ad sp create-for-rbac --name "github-actions-sp" --role contributor --scopes /subscriptions/<your-subscription-id> --sdk-auth
+```
+
+Then in GitHub, go to your repo → **Settings** → **Secrets and variables** → **Actions**:
+
+- **Add secret:** Click "New repository secret"
+  - Name: `AZURE_CREDENTIALS`
+  - Value: Paste the entire JSON output from the command above
+
+- **Add variable:** Click the "Variables" tab → "New repository variable"
+  - Name: `ACR_NAME`
+  - Value: Your ACR name (just the name, not the full `.azurecr.io` URL)
 
 ### 3. Build and Push Images
 Go to GitHub Actions → "Build and Push to ACR" → Run workflow

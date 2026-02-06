@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: weather-web
-          image: ACR_NAME.azurecr.io/weatherFrontend:latest
+          image: ACR_NAME.azurecr.io/weather-frontend:latest
           ports:
             - containerPort: 8080
           env:

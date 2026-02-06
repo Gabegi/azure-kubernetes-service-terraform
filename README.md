@@ -4,6 +4,48 @@ Azure Kubernetes Service with Terraform
 
 This repo deploys a production-grade Kubernetes cluster on Azure with a sample .NET application.
 
+## Quick Start
+
+### 1. Deploy Infrastructure
+```bash
+cd infra
+terraform init
+terraform plan -var-file="vars/dev.tfvars"
+terraform apply -var-file="vars/dev.tfvars" -auto-approve
+```
+
+### 2. Set Up GitHub Secrets
+- Add secret `AZURE_CREDENTIALS` - Service principal JSON
+- Add variable `ACR_NAME` - Your ACR name
+
+### 3. Build and Push Images
+Go to GitHub Actions → "Build and Push to ACR" → Run workflow
+
+### 4. Connect to AKS
+```bash
+az aks get-credentials --resource-group rg-demo-dev-eus-001 --name aks-demo-dev-eus-001
+```
+
+### 5. Update Manifests with ACR Name
+```bash
+sed -i 's/ACR_NAME/<your-acr-name>/g' k8s/*.yaml
+```
+
+### 6. Deploy to Kubernetes
+```bash
+kubectl apply -f k8s/
+```
+
+### 7. Verify Deployment
+```bash
+kubectl get pods
+kubectl get svc
+```
+
+The frontend LoadBalancer service will get an external IP after a minute. Access your app at that IP.
+
+---
+
 ## Repository Structure
 
 ```

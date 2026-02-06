@@ -22,15 +22,6 @@ resource "azurerm_role_assignment" "kv_secrets_officer" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
-# Store ACR name in Key Vault
-resource "azurerm_key_vault_secret" "acr_name" {
-  name         = "acr-name"
-  value        = module.acr.name
-  key_vault_id = azurerm_key_vault.main.id
-
-  depends_on = [azurerm_role_assignment.kv_secrets_officer]
-}
-
 # Output
 output "key_vault_name" {
   value = azurerm_key_vault.main.name

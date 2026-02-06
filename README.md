@@ -28,8 +28,8 @@ Then in GitHub, go to your repo → **Settings** → **Secrets and variables** �
   - Value: Paste the entire JSON output from the command above
 
 - **Add variable:** Click the "Variables" tab → "New repository variable"
-  - Name: `ACR_NAME`
-  - Value: Your ACR name (just the name, not the full `.azurecr.io` URL)
+  - Name: `KEY_VAULT_NAME`
+  - Value: Your Key Vault name (e.g. `kv-demo-dev-001`) — the ACR name is stored in Key Vault automatically by Terraform
 
 ### 3. Build and Push Images
 Go to GitHub Actions → "Build and Push to ACR" → Run workflow
@@ -181,6 +181,6 @@ GitHub Actions workflow (`.github/workflows/build-push.yaml`) builds and pushes 
 
 **Setup:**
 1. Add secret `AZURE_CREDENTIALS` (service principal JSON)
-2. Add variable `ACR_NAME` (your ACR name)
+2. Add variable `KEY_VAULT_NAME` (your Key Vault name — ACR name is fetched from Key Vault at runtime)
 
 Trigger manually from GitHub Actions.

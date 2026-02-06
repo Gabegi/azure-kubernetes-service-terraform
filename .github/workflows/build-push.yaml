@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # Manual trigger only
 
 env:
-  ACR_NAME: ${{ vars.ACR_NAME }}
+  KEY_VAULT_NAME: ${{ vars.KEY_VAULT_NAME }}
 
 jobs:
   build-api:
@@ -18,6 +18,11 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get ACR name from Key Vault
+        run: |
+          ACR_NAME=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name acr-name --query value -o tsv)
+          echo "ACR_NAME=$ACR_NAME" >> $GITHUB_ENV
 
       - name: Login to ACR
         run: az acr login --name ${{ env.ACR_NAME }}
@@ -41,6 +46,11 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get ACR name from Key Vault
+        run: |
+          ACR_NAME=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name acr-name --query value -o tsv)
+          echo "ACR_NAME=$ACR_NAME" >> $GITHUB_ENV
 
       - name: Login to ACR
         run: az acr login --name ${{ env.ACR_NAME }}

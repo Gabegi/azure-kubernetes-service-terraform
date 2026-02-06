@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: weather-api
-          image: ACR_NAME.azurecr.io/weather-api:latest
+          image: ACR_NAME.azurecr.io/weatherBackend:latest
           ports:
             - containerPort: 8080
           env:

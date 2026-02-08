@@ -10,6 +10,12 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  backend "azurerm" {
+    storage_account_name = "bestnamesa"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {

@@ -1,10 +1,14 @@
-name: Build and Push to ACR
+name: Build and Deploy App
 
 on:
-  workflow_dispatch: # Manual trigger only
+  push:
+    branches: [main]
+  workflow_dispatch:
 
 env:
-  KEY_VAULT_NAME: ${{ vars.KEY_VAULT_NAME }}
+  ACR_NAME: acrdemodeveus001
+  AKS_NAME: aks-demo-dev-eus-001
+  RESOURCE_GROUP: rg-demo-dev-eus-001
 
 jobs:
   build-api:
@@ -18,11 +22,6 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Get ACR name from Key Vault
-        run: |
-          ACR_NAME=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name acr-name --query value -o tsv)
-          echo "ACR_NAME=$ACR_NAME" >> $GITHUB_ENV
 
       - name: Login to ACR
         run: az acr login --name ${{ env.ACR_NAME }}
@@ -47,11 +46,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Get ACR name from Key Vault
-        run: |
-          ACR_NAME=$(az keyvault secret show --vault-name ${{ env.KEY_VAULT_NAME }} --name acr-name --query value -o tsv)
-          echo "ACR_NAME=$ACR_NAME" >> $GITHUB_ENV
-
       - name: Login to ACR
         run: az acr login --name ${{ env.ACR_NAME }}
 
@@ -62,3 +56,27 @@ jobs:
                        src/weather-frontend/
           docker push ${{ env.ACR_NAME }}.azurecr.io/weather-frontend:${{ github.sha }}
           docker push ${{ env.ACR_NAME }}.azurecr.io/weather-frontend:latest
+
+  deploy:
+    name: Deploy to AKS
+    runs-on: ubuntu-latest
+    needs: [build-api, build-frontend]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get AKS credentials
+        run: az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.AKS_NAME }}
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f k8s/
+
+      - name: Verify deployment
+        run: |
+          kubectl rollout status deployment/weather-backend --timeout=120s
+          kubectl rollout status deployment/weather-frontend --timeout=120s

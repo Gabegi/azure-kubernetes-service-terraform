@@ -14,5 +14,5 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
       - run: terraform init
         working-directory: ./infra
-      - run: terraform apply -var-file="vars/dev.tfvars" -auto-approve
+      - run: terraform apply -auto-approve
         working-directory: ./infra

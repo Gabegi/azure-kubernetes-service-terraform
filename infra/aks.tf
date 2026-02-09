@@ -41,7 +41,7 @@ module "aks" {
   dns_service_ip = "10.1.0.10"
 
   # Monitoring
-  enable_monitoring          = true
+  enable_monitoring          = false
   oms_agent_enabled          = true
   log_analytics_workspace_id = azurerm_log_analytics_workspace.aks.id
 

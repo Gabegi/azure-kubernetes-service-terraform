@@ -2,7 +2,7 @@
 # Use existing resource group instead of creating it
 
 data "azurerm_resource_group" "main" {
-  name = "rg-${local.workload}-${local.environment}-${local.instance}"
+  name = "rg-${local.workload}-${local.environment}-eus-${local.instance}"
 }
 
 # Create locals that mimic the module outputs for backward compatibility

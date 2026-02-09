@@ -1,11 +1,13 @@
 # resource-group.tf
+# Use existing resource group instead of creating it
 
-module "resource_group" {
-  source = "./modules/resource-group"
+data "azurerm_resource_group" "main" {
+  name = "rg-${local.workload}-${local.environment}-${local.instance}"
+}
 
-  workload    = local.workload
-  environment = local.environment
-  location    = local.location
-  instance    = local.instance
-  common_tags = local.common_tags
+# Create locals that mimic the module outputs for backward compatibility
+locals {
+  rg_id       = data.azurerm_resource_group.main.id
+  rg_name     = data.azurerm_resource_group.main.name
+  rg_location = data.azurerm_resource_group.main.location
 }

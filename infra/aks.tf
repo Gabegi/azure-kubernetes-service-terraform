@@ -4,7 +4,7 @@
 resource "azurerm_log_analytics_workspace" "aks" {
   name                = "log-${local.workload}-${local.environment}-eus-${local.instance}"
   location            = local.location
-  resource_group_name = module.resource_group.rg_name
+  resource_group_name = local.rg_name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 
@@ -19,7 +19,7 @@ module "aks" {
   environment         = local.environment
   location            = local.location
   instance            = local.instance
-  resource_group_name = module.resource_group.rg_name
+  resource_group_name = local.rg_name
   common_tags         = local.common_tags
 
   # Cluster config
@@ -52,7 +52,7 @@ module "aks" {
 # Outputs
 output "resource_group_name" {
   description = "Name of the resource group"
-  value       = module.resource_group.rg_name
+  value       = local.rg_name
 }
 
 output "aks_cluster_name" {

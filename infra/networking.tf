@@ -7,7 +7,7 @@ module "networking" {
   environment         = local.environment
   location            = local.location
   instance            = local.instance
-  resource_group_name = module.resource_group.rg_name
+  resource_group_name = local.rg_name
   common_tags         = local.common_tags
 
   vnet_address_space = ["10.0.0.0/16"]

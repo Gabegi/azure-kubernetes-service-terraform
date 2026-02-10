@@ -16,5 +16,8 @@ module "networking" {
     aks = {
       address_prefixes = ["10.0.1.0/24"]
     }
+    appgw = {
+      address_prefixes = ["10.0.2.0/24"]
+    }
   }
 }

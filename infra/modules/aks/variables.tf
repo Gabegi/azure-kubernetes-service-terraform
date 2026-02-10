@@ -285,6 +285,22 @@ variable "enable_kube_dashboard" {
 }
 
 # ============================================================================
+# AGIC (Application Gateway Ingress Controller)
+# ============================================================================
+
+variable "enable_ingress_application_gateway" {
+  type        = bool
+  description = "Enable Application Gateway Ingress Controller (AGIC) add-on"
+  default     = false
+}
+
+variable "ingress_application_gateway_id" {
+  type        = string
+  description = "Existing Application Gateway ID for AGIC to manage"
+  default     = null
+}
+
+# ============================================================================
 # Maintenance Window
 # ============================================================================
 

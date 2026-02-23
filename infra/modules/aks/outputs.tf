@@ -158,3 +158,15 @@ output "portal_url" {
   description = "Azure Portal URL for the AKS cluster"
   value       = "https://portal.azure.com/#resource${azurerm_kubernetes_cluster.aks.id}"
 }
+
+# ============================================================================
+# AGIC / Application Gateway
+# ============================================================================
+
+output "ingress_application_gateway" {
+  description = "AGIC add-on details"
+  value = var.enable_ingress_application_gateway ? {
+    effective_gateway_id = try(azurerm_kubernetes_cluster.aks.ingress_application_gateway[0].effective_gateway_id, null)
+    ingress_application_gateway_identity = try(azurerm_kubernetes_cluster.aks.ingress_application_gateway[0].ingress_application_gateway_identity, null)
+  } : null
+}

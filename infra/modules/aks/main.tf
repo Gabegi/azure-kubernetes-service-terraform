@@ -129,6 +129,18 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
   }
 
+  # ---------------------------------------------------------------------------
+  # AGIC Add-on (Optional)
+  # Application Gateway Ingress Controller for L7 load balancing
+  # ---------------------------------------------------------------------------
+  dynamic "ingress_application_gateway" {
+    for_each = var.enable_ingress_application_gateway ? [1] : []
+
+    content {
+      gateway_id = var.ingress_application_gateway_id
+    }
+  }
+
   # Add-ons
   http_application_routing_enabled = var.enable_http_application_routing # Dev/test ingress (not for prod)
   azure_policy_enabled             = var.enable_azure_policy             # Enforce policies on cluster

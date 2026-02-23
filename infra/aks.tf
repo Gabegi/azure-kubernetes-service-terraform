@@ -45,6 +45,10 @@ module "aks" {
   oms_agent_enabled          = true
   log_analytics_workspace_id = azurerm_log_analytics_workspace.aks.id
 
+  # AGIC (Application Gateway Ingress Controller)
+  enable_ingress_application_gateway = true
+  ingress_application_gateway_id     = azurerm_application_gateway.main.id
+
   # Keep it simple - no Azure AD integration for dev
   admin_group_object_ids = []
 }

@@ -49,7 +49,7 @@ kind: Service
 metadata:
   name: weather-frontend-service
 spec:
-  type: LoadBalancer # Public access
+  type: ClusterIP # Routed via Application Gateway Ingress
   selector:
     app: weather-frontend
   ports:

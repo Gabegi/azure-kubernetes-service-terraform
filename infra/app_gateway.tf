@@ -67,6 +67,11 @@ resource "azurerm_application_gateway" "main" {
     priority                   = 100
   }
 
+  ssl_policy {
+    policy_type = "Predefined"
+    policy_name = "AppGwSslPolicy20220101"
+  }
+
   # AGIC manages the App Gateway config - ignore changes it makes
   lifecycle {
     ignore_changes = [

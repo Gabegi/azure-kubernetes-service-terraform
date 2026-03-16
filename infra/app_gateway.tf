@@ -115,6 +115,20 @@ resource "azurerm_application_gateway" "main" {
   tags = local.common_tags
 }
 
+# Grant AGIC identity Reader access to the Resource Group
+resource "azurerm_role_assignment" "agic_rg_reader" {
+  scope                = local.rg_id
+  role_definition_name = "Reader"
+  principal_id         = module.aks.ingress_application_gateway.ingress_application_gateway_identity[0].object_id
+}
+
+# Grant AGIC identity Contributor access to the Application Gateway
+resource "azurerm_role_assignment" "agic_appgw_contributor" {
+  scope                = azurerm_application_gateway.main.id
+  role_definition_name = "Contributor"
+  principal_id         = module.aks.ingress_application_gateway.ingress_application_gateway_identity[0].object_id
+}
+
 # Outputs
 output "app_gateway_id" {
   description = "Application Gateway ID"

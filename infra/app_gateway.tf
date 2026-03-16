@@ -136,6 +136,25 @@ resource "azurerm_role_assignment" "agic_appgw_contributor" {
   principal_id         = module.aks.ingress_application_gateway.ingress_application_gateway_identity[0].object_id
 }
 
+# Diagnostic settings - send WAF logs to Log Analytics
+resource "azurerm_monitor_diagnostic_setting" "appgw" {
+  name                       = "appgw-diagnostics"
+  target_resource_id         = azurerm_application_gateway.main.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.aks.id
+
+  enabled_log {
+    category = "ApplicationGatewayFirewallLog"
+  }
+
+  enabled_log {
+    category = "ApplicationGatewayAccessLog"
+  }
+
+  metric {
+    category = "AllMetrics"
+  }
+}
+
 # Outputs
 output "app_gateway_id" {
   description = "Application Gateway ID"

@@ -30,9 +30,11 @@ resource "azurerm_public_ip" "appgw" {
   resource_group_name = local.rg_name
   allocation_method   = "Static"
   sku                 = "Standard"
+  domain_name_label   = "weather-${local.workload}-${local.environment}"
 
   tags = local.common_tags
 }
+
 
 # Application Gateway
 resource "azurerm_application_gateway" "main" {
@@ -164,4 +166,9 @@ output "app_gateway_id" {
 output "app_gateway_public_ip" {
   description = "Application Gateway public IP address"
   value       = azurerm_public_ip.appgw.ip_address
+}
+
+output "app_gateway_fqdn" {
+  description = "Application Gateway DNS name"
+  value       = azurerm_public_ip.appgw.fqdn
 }

@@ -1,5 +1,28 @@
 # app_gateway.tf
 
+# WAF Policy
+resource "azurerm_web_application_firewall_policy" "main" {
+  name                = "waf-${local.workload}-${local.environment}-eus-${local.instance}"
+  location            = local.location
+  resource_group_name = local.rg_name
+
+  managed_rules {
+    managed_rule_set {
+      type    = "OWASP"
+      version = "3.2"
+    }
+  }
+
+  policy_settings {
+    enabled                     = true
+    mode                        = "Prevention"
+    request_body_check          = true
+    max_request_body_size_in_kb = 128
+  }
+
+  tags = local.common_tags
+}
+
 # Public IP for Application Gateway
 resource "azurerm_public_ip" "appgw" {
   name                = "pip-agw-${local.workload}-${local.environment}-eus-${local.instance}"
@@ -18,10 +41,12 @@ resource "azurerm_application_gateway" "main" {
   resource_group_name = local.rg_name
 
   sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
+    name     = "WAF_v2"
+    tier     = "WAF_v2"
     capacity = 1
   }
+
+  firewall_policy_id = azurerm_web_application_firewall_policy.main.id
 
   gateway_ip_configuration {
     name      = "appgw-ip-config"

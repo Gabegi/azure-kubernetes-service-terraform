@@ -115,6 +115,13 @@ resource "azurerm_application_gateway" "main" {
   tags = local.common_tags
 }
 
+# Grant AGIC identity Network Contributor on the App Gateway subnet
+resource "azurerm_role_assignment" "agic_subnet_network_contributor" {
+  scope                = module.networking.subnet_ids["appgw"]
+  role_definition_name = "Network Contributor"
+  principal_id         = module.aks.ingress_application_gateway.ingress_application_gateway_identity[0].object_id
+}
+
 # Grant AGIC identity Reader access to the Resource Group
 resource "azurerm_role_assignment" "agic_rg_reader" {
   scope                = local.rg_id

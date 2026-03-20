@@ -31,7 +31,7 @@ module "aks" {
   system_node_pool_node_count = 3
   system_node_pool_min_count  = 3
   system_node_pool_max_count  = 6
-  system_node_pool_zones      = ["1", "2", "3"]
+  system_node_pool_zones      = null
 
   # Networking
   vnet_subnet_id = module.networking.subnet_ids["aks"]

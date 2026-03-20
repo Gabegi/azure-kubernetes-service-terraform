@@ -27,7 +27,7 @@ module "aks" {
 
   # System node pool
   system_node_pool_name       = "system"
-  system_node_pool_vm_size    = "Standard_B2s"
+  system_node_pool_vm_size    = "Standard_D2s_v3"
   system_node_pool_node_count = 3
   system_node_pool_min_count  = 3
   system_node_pool_max_count  = 6

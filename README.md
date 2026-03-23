@@ -69,7 +69,7 @@ The frontend LoadBalancer service will get an external IP after a minute. Access
 │   ├── weather-api/          # .NET Backend API
 │   └── weather-frontend/     # Blazor Frontend
 ├── k8s/                      # Kubernetes manifests
-│   ├── postgres.yaml         # PostgreSQL StatefulSet, Service, Secret
+│   ├── postgres-statefulset.yaml # PostgreSQL StatefulSet, Service, Secret
 │   ├── backend-manifest.yaml # Backend Deployment + Service
 │   ├── frontend-manifest.yaml# Frontend Deployment + Service
 │   ├── backend-hpa.yaml      # HPA for backend (CPU + memory)

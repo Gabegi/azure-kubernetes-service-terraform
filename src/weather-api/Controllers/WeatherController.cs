@@ -26,9 +26,22 @@ public class WeatherController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> SaveWeather([FromBody] WeatherData data)
     {
+        Console.WriteLine("*** POST called!");
+        Console.WriteLine($"*** Data received: City={data?.City}, Temp={data?.Temperature}");
+
+        if (data == null)
+        {
+            Console.WriteLine("*** ERROR: data is NULL!");
+            return BadRequest("Data is null");
+        }
+
         data.RecordedAt = DateTime.UtcNow;
         _context.WeatherRecords.Add(data);
+
+        Console.WriteLine("*** About to save...");
         await _context.SaveChangesAsync();
+        Console.WriteLine("*** Saved successfully!");
+
         return CreatedAtAction(nameof(GetWeather), new { id = data.Id }, data);
     }
 }

@@ -84,7 +84,6 @@ jobs:
 
       - name: Deploy App Manifests
         run: |
-          kubectl delete ingress weather-ingress --ignore-not-found
           kubectl apply -f k8s/backend-manifest.yaml
           kubectl apply -f k8s/frontend-manifest.yaml
           kubectl apply -f k8s/backend-hpa.yaml

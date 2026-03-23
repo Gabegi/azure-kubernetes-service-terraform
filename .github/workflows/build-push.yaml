@@ -71,8 +71,13 @@ jobs:
       - name: Get AKS credentials
         run: az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP }} --name ${{ env.AKS_NAME }}
 
-      - name: Deploy to Kubernetes
-        run: kubectl apply -f k8s/
+      - name: Deploy PostgreSQL
+        run: |
+          kubectl apply -f k8s/postgres.yaml
+          kubectl rollout status statefulset/postgres --timeout=120s
+
+      - name: Deploy App
+        run: kubectl apply -f k8s/backend-manifest.yaml -f k8s/frontend-manifest.yaml -f k8s/backend-hpa.yaml -f k8s/ingress.yaml
 
       - name: Verify deployment
         run: |

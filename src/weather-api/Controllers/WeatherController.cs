@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WeatherApi.Data;
+using WeatherApi.Models;
 
 namespace WeatherApi.Controllers;
 
@@ -6,37 +9,26 @@ namespace WeatherApi.Controllers;
 [Route("api/[controller]")]
 public class WeatherController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild",
-        "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+    private readonly WeatherDbContext _context;
 
-    [HttpGet]
-    public IActionResult Get()
+    public WeatherController(WeatherDbContext context)
     {
-        var forecast = Enumerable.Range(1, 5).Select(index => new
-        {
-            date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            temperatureC = Random.Shared.Next(-20, 55),
-            summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
-
-        return Ok(forecast);
+        _context = context;
     }
 
-    [HttpGet("{city}")]
-    public IActionResult GetByCity(string city)
+    [HttpGet]
+    public async Task<IActionResult> GetWeather()
     {
-        var temperature = Random.Shared.Next(-20, 55);
-        return Ok(new
-        {
-            city = city,
-            temperatureC = temperature,
-            temperatureF = 32 + (int)(temperature / 0.5556),
-            summary = Summaries[Random.Shared.Next(Summaries.Length)],
-            timestamp = DateTime.UtcNow
-        });
+        var weather = await _context.WeatherRecords.ToListAsync();
+        return Ok(weather);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SaveWeather([FromBody] WeatherData data)
+    {
+        data.RecordedAt = DateTime.UtcNow;
+        _context.WeatherRecords.Add(data);
+        await _context.SaveChangesAsync();
+        return CreatedAtAction(nameof(GetWeather), new { id = data.Id }, data);
     }
 }

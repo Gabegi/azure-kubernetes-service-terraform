@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using WeatherApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllers();
+
+// Database
+builder.Services.AddDbContext<WeatherDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddOpenApi();
 
 // Configure CORS - only allow frontend origins

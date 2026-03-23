@@ -22,6 +22,8 @@ spec:
               value: "http://+:8080"
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
+            - name: ConnectionStrings__DefaultConnection
+              value: "Host=postgres-service;Port=5432;Database=weatherdb;Username=weatheruser;Password=weatherpass123;SSL Mode=Disable"
           resources:
             requests:
               memory: "128Mi"

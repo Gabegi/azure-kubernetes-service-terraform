@@ -6,33 +6,57 @@
 
 <h1>Weather</h1>
 
-<p>Weather data from the backend API.</p>
+<h5 class="mt-4">Add Weather Record</h5>
+<div class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label class="form-label">City</label>
+        <input class="form-control" @bind="newCity" placeholder="e.g. London" />
+    </div>
+    <div class="col-auto">
+        <label class="form-label">Temperature (°C)</label>
+        <input class="form-control" type="number" @bind="newTemperature" />
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" @onclick="AddWeather" disabled="@isSaving">
+            @(isSaving ? "Saving..." : "Add")
+        </button>
+    </div>
+</div>
+
+@if (saveError != null)
+{
+    <div class="alert alert-danger">@saveError</div>
+}
 
 @if (errorMessage != null)
 {
     <div class="alert alert-danger">@errorMessage</div>
 }
-else if (forecasts == null)
+else if (records == null)
 {
     <p><em>Loading...</em></p>
+}
+else if (records.Length == 0)
+{
+    <p>No records yet.</p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th aria-label="Temperature in Celsius">Temp. (C)</th>
-                <th>Summary</th>
+                <th>City</th>
+                <th>Temperature (°C)</th>
+                <th>Recorded At</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var record in records)
             {
                 <tr>
-                    <td>@forecast.Date</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.Summary</td>
+                    <td>@record.City</td>
+                    <td>@record.Temperature</td>
+                    <td>@record.RecordedAt</td>
                 </tr>
             }
         </tbody>
@@ -40,14 +64,23 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private WeatherRecord[]? records;
     private string? errorMessage;
+    private string? saveError;
+    private string newCity = "";
+    private int newTemperature = 0;
+    private bool isSaving = false;
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadRecords();
+    }
+
+    private async Task LoadRecords()
+    {
         try
         {
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("api/weather");
+            records = await Http.GetFromJsonAsync<WeatherRecord[]>("api/weather");
         }
         catch (Exception ex)
         {
@@ -55,10 +88,42 @@ else
         }
     }
 
-    private class WeatherForecast
+    private async Task AddWeather()
     {
-        public string? Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
+        if (string.IsNullOrWhiteSpace(newCity)) return;
+
+        isSaving = true;
+        saveError = null;
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/weather", new { City = newCity, Temperature = newTemperature });
+            if (response.IsSuccessStatusCode)
+            {
+                newCity = "";
+                newTemperature = 0;
+                await LoadRecords();
+            }
+            else
+            {
+                saveError = $"Failed to save: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            saveError = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    private class WeatherRecord
+    {
+        public int Id { get; set; }
+        public string? City { get; set; }
+        public int Temperature { get; set; }
+        public DateTime RecordedAt { get; set; }
     }
 }

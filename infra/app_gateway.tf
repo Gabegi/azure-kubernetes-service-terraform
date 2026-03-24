@@ -8,8 +8,8 @@ resource "azurerm_web_application_firewall_policy" "main" {
 
   managed_rules {
     managed_rule_set {
-      type    = "OWASP"
-      version = "3.2"
+      type    = "Microsoft_DefaultRuleSet"
+      version = "2.1"
     }
   }
 
